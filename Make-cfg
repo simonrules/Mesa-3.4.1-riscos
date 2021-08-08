@@ -1,0 +1,69 @@
+# Makefile for Mesa under Acorn RISC OS - Configuration
+# Last updated:	Sat 05th May 2001
+
+# Author:		David Boddie
+# Significant help:	Steven Purchase (Acorn tools), Paul Boddie
+
+############################################################################
+
+# Flags for the compiler - choose your configuration
+# I've not added the flag, -mamu to the gcc lines as AMU wouldn't
+# necessarily be used with gcc. Add it if you want.
+
+# gcc and UnixLib
+# CFLAGS = -c -munixlib -mapcs -fno-builtin
+# CFLAGS = -c -munixlib -Wall -mapcs -O3 -fno-builtin -DPROFILE
+# CFLAGS = -c -munixlib -Wall -mapcs -O3 -fno-builtin
+# CFLAGS = -c -munixlib -mapcs -O3 -fno-builtin
+# CFLAGS = -c -munixlib -mapcs -O3
+CFLAGS = -c -munixlib -mapcs -O3 -DUSE_ARM_ASM
+# CFLAGS = -c -munixlib -Wall -mapcs -mamu
+
+# gcc and Shared C Library
+# CFLAGS = -c -mstubs -Wall -mthrowback -mapcs
+# CFLAGS = -c -mstubs -Wall -mthrowback -mapcs -mamu
+# CFLAGS = -c -mstubs -Wall -mthrowback -mapcs -mamu -DUSE_ARM_ASM
+
+# gcc and Shared C Library for PyOpenGL (no common blocks)
+# CFLAGS = -c -mstubs -mapcs -mcpu=arm7500fe -fno-common -fno-builtin -O3
+
+# Norcroft and UnixLib
+# CFLAGS = -W -c -Otime -JUnix: -Wall -ff -depend !Depend -throwback
+
+# lcc and Shared C Library
+# CFLAGS = -c -A
+
+# FPE
+# CFLAGS = $(CFLAGS) -mfpe
+
+# Your C compiler
+
+# gcc
+CC = gcc $(CFLAGS)
+
+# lcc
+# CC = lcc $(CFLAGS)
+
+############################################################################
+
+# Your assembler
+
+# Target processor
+# TARGET = -target ARM7
+TARGET = 
+
+# as - comes with gcc
+AS = as -gcc $(TARGET)
+
+############################################################################
+
+# Your preferred linker
+
+# makeALF - to make a library
+MAKELIB = makeALF -o
+
+# ld - to statically link the object files
+# MAKELIB = ld -o
+
+# Proper Acorn Utils
+# MAKELIB = libfile -c -o

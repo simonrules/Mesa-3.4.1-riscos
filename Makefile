@@ -1,661 +1,320 @@
-# $Id: Makefile.X11,v 1.32.2.7 2001/02/07 23:49:26 brianp Exp $
+# Makefile for Mesa under Acorn RISC OS - Main Makefile
+
+# Author:		David Boddie
+# Significant help:	Steven Purchase, Paul Boddie
+
+# Created:	Sat 13th June 1998
+# Last updated:	Fri 25th May 2001 (for 3.4.2)
+
+############################################################################
 
 # Mesa 3-D graphics library
-# Version:  3.4.1
+# Version:  3.0
+# Copyright (C) 1995-1998  Brian Paul
 #
-# Copyright (C) 1999-2000  Brian Paul   All Rights Reserved.
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Library General Public
+# License as published by the Free Software Foundation; either
+# version 2 of the License, or (at your option) any later version.
 #
-# Permission is hereby granted, free of charge, to any person obtaining a
-# copy of this software and associated documentation files (the "Software"),
-# to deal in the Software without restriction, including without limitation
-# the rights to use, copy, modify, merge, publish, distribute, sublicense,
-# and/or sell copies of the Software, and to permit persons to whom the
-# Software is furnished to do so, subject to the following conditions:
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Library General Public License for more details.
 #
-# The above copyright notice and this permission notice shall be included
-# in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-# OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-# BRIAN PAUL BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
-# AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+# You should have received a copy of the GNU Library General Public
+# License along with this library; if not, write to the Free
+# Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+# Attempt to recursively make the various components of the distribution
 
-# Top-level makefile for Mesa
-# To add a new configuration for your system add it to the list below
-# then update the Make-config file.
+default :
+	@echo Type one of the following:
+	@echo
+	@echo make install
+	@echo make all
+	@echo make clean
 
-SHELL = /bin/sh
+install :
+	@echo Rearranging files.
+	cdir h
+	ifthere acconfig/h then rename acconfig/h h.acconfig
+	ifthere include.GL.gl/h then rename include.GL.gl/h include.GL.h.gl
+	ifthere include.GL.glext/h then rename include.GL.glext/h include.GL.h.glext
+	ifthere include.GL.glu/h then rename include.GL.glu/h include.GL.h.glu
+	ifthere include.GL.glu_mangle/h then rename include.GL.glu_mangle/h include.GL.h.glu_mangle
+	ifthere include.GL.gl_mangle/h then rename include.GL.gl_mangle/h include.GL.h.gl_mangle
+	ifthere include.GL.osmesa/h then rename include.GL.osmesa/h include.GL.h.osmesa
+	ifthere include.GLView/h then rename include.GLView/h include.h.GLView
 
+#	wipe include.GL.* ~C ~V ~R
 
+	cdir src.c
+	cdir src.h
+	ifthere src.aatriangle/c then rename src.aatriangle/c src.c.aatriangle
+	ifthere src.aatriangle/h then rename src.aatriangle/h src.h.aatriangle
+	ifthere src.aatritemp/h then rename src.aatritemp/h src.h.aatritemp
+	ifthere src.accum/c then rename src.accum/c src.c.accum
+	ifthere src.accum/h then rename src.accum/h src.h.accum
+	ifthere src.all/h then rename src.all/h src.h.all
+	ifthere src.alpha/c then rename src.alpha/c src.c.alpha
+	ifthere src.alpha/h then rename src.alpha/h src.h.alpha
+	ifthere src.alphabuf/c then rename src.alphabuf/c src.c.alphabuf
+	ifthere src.alphabuf/h then rename src.alphabuf/h src.h.alphabuf
+#	ifthere src.api/h then rename src.api/h src.h.api
+#	ifthere src.api1/c then rename src.api1/c src.c.api1
+#	ifthere src.api2/c then rename src.api2/c src.c.api2
+#	ifthere src.apiext/c then rename src.apiext/c src.c.apiext
+#	ifthere src.asm_386/h then rename src.asm_386/h src.h.asm_386
+#	ifthere src.asm_mmx/c then rename src.asm_mmx/c src.c.asm_mmx
+#	ifthere src.asm_mmx/h then rename src.asm_mmx/h src.h.asm_mmx
+	ifthere src.attrib/c then rename src.attrib/c src.c.attrib
+	ifthere src.attrib/h then rename src.attrib/h src.h.attrib
+	ifthere src.bbox/c then rename src.bbox/c src.c.bbox
+	ifthere src.bbox/h then rename src.bbox/h src.h.bbox
+	ifthere src.bitmap/c then rename src.bitmap/c src.c.bitmap
+	ifthere src.bitmap/h then rename src.bitmap/h src.h.bitmap
+	ifthere src.blend/c then rename src.blend/c src.c.blend
+	ifthere src.blend/h then rename src.blend/h src.h.blend
+	ifthere src.buffers/c then rename src.buffers/c src.c.buffers
+	ifthere src.buffers/h then rename src.buffers/h src.h.buffers
+	ifthere src.clip/c then rename src.clip/c src.c.clip
+	ifthere src.clip/h then rename src.clip/h src.h.clip
+	ifthere src.clip_funcs/h then rename src.clip_funcs/h src.h.clip_funcs
+	ifthere src.clip_tmp/h then rename src.clip_tmp/h src.h.clip_tmp
+	ifthere src.colortab/c then rename src.colortab/c src.c.colortab
+	ifthere src.colortab/h then rename src.colortab/h src.h.colortab
+	ifthere src.config/c then rename src.config/c src.c.config
+	ifthere src.config/h then rename src.config/h src.h.config
+	ifthere src.context/c then rename src.context/c src.c.context
+	ifthere src.context/h then rename src.context/h src.h.context
+	ifthere src.convolve/c then rename src.convolve/c src.c.convolve
+	ifthere src.copypix/c then rename src.copypix/c src.c.copypix
+	ifthere src.copypix/h then rename src.copypix/h src.h.copypix
+	ifthere src.copy_tmp/h then rename src.copy_tmp/h src.h.copy_tmp
+	ifthere src.cull_tmp/h then rename src.cull_tmp/h src.h.cull_tmp
+	ifthere src.cva/c then rename src.cva/c src.c.cva
+	ifthere src.cva/h then rename src.cva/h src.h.cva
+	ifthere src.dd/h then rename src.dd/h src.h.dd
+	ifthere src.debug_xform/c then rename src.debug_xform/c src.c.debug_xform
+	ifthere src.debug_xform/h then rename src.debug_xform/h src.h.debug_xform
+	ifthere src.depth/c then rename src.depth/c src.c.depth
+	ifthere src.depth/h then rename src.depth/h src.h.depth
+	ifthere src.dispatch/c then rename src.dispatch/c src.c.dispatch
+	ifthere src.dlist/c then rename src.dlist/c src.c.dlist
+	ifthere src.dlist/h then rename src.dlist/h src.h.dlist
+	ifthere src.dotprod_tmp/h then rename src.dotprod_tmp/h src.h.dotprod_tmp
+	ifthere src.drawpix/c then rename src.drawpix/c src.c.drawpix
+	ifthere src.drawpix/h then rename src.drawpix/h src.h.drawpix
+	ifthere src.enable/c then rename src.enable/c src.c.enable
+	ifthere src.enable/h then rename src.enable/h src.h.enable
+	ifthere src.enums/c then rename src.enums/c src.c.enums
+	ifthere src.enums/h then rename src.enums/h src.h.enums
+	ifthere src.eval/c then rename src.eval/c src.c.eval
+	ifthere src.eval/h then rename src.eval/h src.h.eval
+	ifthere src.extensions/c then rename src.extensions/c src.c.extensions
+	ifthere src.extensions/h then rename src.extensions/h src.h.extensions
+	ifthere src.feedback/c then rename src.feedback/c src.c.feedback
+	ifthere src.feedback/h then rename src.feedback/h src.h.feedback
+	ifthere src.fixed/h then rename src.fixed/h src.h.fixed
+	ifthere src.fog/c then rename src.fog/c src.c.fog
+	ifthere src.fog/h then rename src.fog/h src.h.fog
+	ifthere src.fog_tmp/h then rename src.fog_tmp/h src.h.fog_tmp
+	ifthere src.general_clip/h then rename src.general_clip/h src.h.general_clip
+	ifthere src.get/c then rename src.get/c src.c.get
+	ifthere src.get/h then rename src.get/h src.h.get
+	ifthere src.glapi/c then rename src.glapi/c src.c.glapi
+	ifthere src.glapi/h then rename src.glapi/h src.h.glapi
+	ifthere src.glapinoop/c then rename src.glapinoop/c src.c.glapinoop
+	ifthere src.glapinoop/h then rename src.glapinoop/h src.h.glapinoop
+	ifthere src.glapioffsets/h then rename src.glapioffsets/h src.h.glapioffsets
+	ifthere src.glapitable/h then rename src.glapitable/h src.h.glapitable
+	ifthere src.glapitemp/h then rename src.glapitemp/h src.h.glapitemp
+	ifthere src.glheader/h then rename src.glheader/h src.h.glheader
+#	ifthere src.glmisc/c then rename src.glmisc/c src.c.glmisc
+#	ifthere src.glmisc/h then rename src.glmisc/h src.h.glmisc
+	ifthere src.glthread/c then rename src.glthread/c src.c.glthread
+	ifthere src.glthread/h then rename src.glthread/h src.h.glthread
+	ifthere src.hash/c then rename src.hash/c src.c.hash
+	ifthere src.hash/h then rename src.hash/h src.h.hash
+	ifthere src.highpc/c then rename src.highpc/c src.c.highpc
+	ifthere src.hint/c then rename src.hint/c src.c.hint
+	ifthere src.hint/h then rename src.hint/h src.h.hint
+	ifthere src.image/c then rename src.image/c src.c.image
+	ifthere src.image/h then rename src.image/h src.h.image
+	ifthere src.imaging/c then rename src.imaging/c src.c.imaging
+	ifthere src.imaging/h then rename src.imaging/h src.h.imaging
+	ifthere src.indirect_tmp/h then rename src.indirect_tmp/h src.h.indirect_tmp
+	ifthere src.interp_tmp/h then rename src.interp_tmp/h src.h.interp_tmp
+	ifthere src.light/c then rename src.light/c src.c.light
+	ifthere src.light/h then rename src.light/h src.h.light
+	ifthere src.lines/c then rename src.lines/c src.c.lines
+	ifthere src.lines/h then rename src.lines/h src.h.lines
+	ifthere src.linetemp/h then rename src.linetemp/h src.h.linetemp
+	ifthere src.lnaatemp/h then rename src.lnaatemp/h src.h.lnaatemp
+	ifthere src.logic/c then rename src.logic/c src.c.logic
+	ifthere src.logic/h then rename src.logic/h src.h.logic
+	ifthere src.lowpc/c then rename src.lowpc/c src.c.lowpc
+	ifthere src.macros/h then rename src.macros/h src.h.macros
+	ifthere src.masking/c then rename src.masking/c src.c.masking
+	ifthere src.masking/h then rename src.masking/h src.h.masking
+	ifthere src.matrix/c then rename src.matrix/c src.c.matrix
+	ifthere src.matrix/h then rename src.matrix/h src.h.matrix
+	ifthere src.mem/c then rename src.mem/c src.c.mem
+	ifthere src.mem/h then rename src.mem/h src.h.mem
+#	ifthere src.misc/c then rename src.misc/c src.c.misc
+#	ifthere src.misc/h then rename src.misc/h src.h.misc
+	ifthere src.mmath/c then rename src.mmath/c src.c.mmath
+	ifthere src.mmath/h then rename src.mmath/h src.h.mmath
+#	ifthere src.mthreads/c then rename src.mthreads/c src.c.mthreads
+#	ifthere src.mthreads/h then rename src.mthreads/h src.h.mthreads
+	ifthere src.norm_tmp/h then rename src.norm_tmp/h src.h.norm_tmp
+	ifthere src.pb/c then rename src.pb/c src.c.pb
+	ifthere src.pb/h then rename src.pb/h src.h.pb
+	ifthere src.pipeline/c then rename src.pipeline/c src.c.pipeline
+	ifthere src.pipeline/h then rename src.pipeline/h src.h.pipeline
+	ifthere src.pixel/c then rename src.pixel/c src.c.pixel
+	ifthere src.pixel/h then rename src.pixel/h src.h.pixel
+	ifthere src.pixeltex/c then rename src.pixeltex/c src.c.pixeltex
+	ifthere src.pixeltex/h then rename src.pixeltex/h src.h.pixeltex
+#	ifthere src.pointers/c then rename src.pointers/c src.c.pointers
+#	ifthere src.pointers/h then rename src.pointers/h src.h.pointers
+	ifthere src.points/c then rename src.points/c src.c.points
+	ifthere src.points/h then rename src.points/h src.h.points
+	ifthere src.polygon/c then rename src.polygon/c src.c.polygon
+	ifthere src.polygon/h then rename src.polygon/h src.h.polygon
+	ifthere src.quads/c then rename src.quads/c src.c.quads
+	ifthere src.quads/h then rename src.quads/h src.h.quads
+	ifthere src.rastpos/c then rename src.rastpos/c src.c.rastpos
+	ifthere src.rastpos/h then rename src.rastpos/h src.h.rastpos
+	ifthere src.readpix/c then rename src.readpix/c src.c.readpix
+	ifthere src.readpix/h then rename src.readpix/h src.h.readpix
+	ifthere src.rect/c then rename src.rect/c src.c.rect
+	ifthere src.rect/h then rename src.rect/h src.h.rect
+	ifthere src.render_tmp/h then rename src.render_tmp/h src.h.render_tmp
+	ifthere src.scissor/c then rename src.scissor/c src.c.scissor
+	ifthere src.scissor/h then rename src.scissor/h src.h.scissor
+	ifthere src.shade/c then rename src.shade/c src.c.shade
+	ifthere src.shade/h then rename src.shade/h src.h.shade
+	ifthere src.shade_tmp/h then rename src.shade_tmp/h src.h.shade_tmp
+	ifthere src.simple_list/h then rename src.simple_list/h src.h.simple_list
+	ifthere src.span/c then rename src.span/c src.c.span
+	ifthere src.span/h then rename src.span/h src.h.span
+	ifthere src.stages/c then rename src.stages/c src.c.stages
+	ifthere src.stages/h then rename src.stages/h src.h.stages
+	ifthere src.state/c then rename src.state/c src.c.state
+	ifthere src.state/h then rename src.state/h src.h.state
+	ifthere src.stencil/c then rename src.stencil/c src.c.stencil
+	ifthere src.stencil/h then rename src.stencil/h src.h.stencil
+	ifthere src.texgen_tmp/h then rename src.texgen_tmp/h src.h.texgen_tmp
+	ifthere src.teximage/c then rename src.teximage/c src.c.teximage
+	ifthere src.teximage/h then rename src.teximage/h src.h.teximage
+	ifthere src.texformat/c then rename src.texformat/c src.c.texformat
+	ifthere src.texformat/h then rename src.texformat/h src.h.texformat
+	ifthere src.texobj/c then rename src.texobj/c src.c.texobj
+	ifthere src.texobj/h then rename src.texobj/h src.h.texobj
+	ifthere src.texstate/c then rename src.texstate/c src.c.texstate
+	ifthere src.texstate/h then rename src.texstate/h src.h.texstate
+	ifthere src.texture/c then rename src.texture/c src.c.texture
+	ifthere src.texture/h then rename src.texture/h src.h.texture
+	ifthere src.texutil/c then rename src.texutil/c src.c.texutil
+	ifthere src.texutil/h then rename src.texutil/h src.h.texutil
+	ifthere src.texutil_tmp/h then rename src.texutil_tmp/h src.h.texutil_tmp
+	ifthere src.translate/c then rename src.translate/c src.c.translate
+	ifthere src.translate/h then rename src.translate/h src.h.translate
+	ifthere src.trans_tmp/h then rename src.trans_tmp/h src.h.trans_tmp
+	ifthere src.triangle/c then rename src.triangle/c src.c.triangle
+	ifthere src.triangle/h then rename src.triangle/h src.h.triangle
+	ifthere src.tritemp/h then rename src.tritemp/h src.h.tritemp
+	ifthere src.types/h then rename src.types/h src.h.types
+	ifthere src.varray/c then rename src.varray/c src.c.varray
+	ifthere src.varray/h then rename src.varray/h src.h.varray
+	ifthere src.vb/c then rename src.vb/c src.c.vb
+	ifthere src.vb/h then rename src.vb/h src.h.vb
+	ifthere src.vbcull/c then rename src.vbcull/c src.c.vbcull
+	ifthere src.vbcull/h then rename src.vbcull/h src.h.vbcull
+	ifthere src.vbfill/c then rename src.vbfill/c src.c.vbfill
+	ifthere src.vbfill/h then rename src.vbfill/h src.h.vbfill
+	ifthere src.vbindirect/c then rename src.vbindirect/c src.c.vbindirect
+	ifthere src.vbindirect/h then rename src.vbindirect/h src.h.vbindirect
+	ifthere src.vbrender/c then rename src.vbrender/c src.c.vbrender
+	ifthere src.vbrender/h then rename src.vbrender/h src.h.vbrender
+	ifthere src.vbxform/c then rename src.vbxform/c src.c.vbxform
+	ifthere src.vbxform/h then rename src.vbxform/h src.h.vbxform
+	ifthere src.vector/c then rename src.vector/c src.c.vector
+	ifthere src.vector/h then rename src.vector/h src.h.vector
+	ifthere src.vertices/c then rename src.vertices/c src.c.vertices
+	ifthere src.vertices/h then rename src.vertices/h src.h.vertices
+	ifthere src.winpos/c then rename src.winpos/c src.c.winpos
+	ifthere src.winpos/h then rename src.winpos/h src.h.winpos
+	ifthere src.xform/c then rename src.xform/c src.c.xform
+	ifthere src.xform/h then rename src.xform/h src.h.xform
+	ifthere src.xform_tmp/h then rename src.xform_tmp/h src.h.xform_tmp
+	ifthere src.zoom/c then rename src.zoom/c src.c.zoom
+	ifthere src.zoom/h then rename src.zoom/h src.h.zoom
 
-default:
-	@echo "Type one of the following:"
-	@echo "  make aix                  for IBM RS/6000 with AIX"
-	@echo "  make aix-sl               for IBM RS/6000, make shared libs"
-	@echo "  make amiwin               for Amiga with SAS/C and AmiWin"
-	@echo "  make amix                 for Amiga 3000 UX  SVR4 v2.1 systems"
-	@echo "  make beos-r4              for BeOS R4"
-	@echo "  make bsdos                for BSD/OS from BSDI using GCC"
-	@echo "  make bsdos4               for BSD/OS 4.x, dynamic libraries"
-	@echo "  make cygnus               for Win95/NT using Cygnus-Win32"
-	@echo "  make cygnus-linux         for Win95/NT using Cygnus-Win32 under Linux"
-	@echo "  make dgux                 for Data General"
-	@echo "  make freebsd              for FreeBSD systems with GCC"
-	@echo "  make freebsd-386          for FreeBSD systems with GCC, w/ Intel assembly"
-	@echo "  make gcc                  for a generic system with GCC"
-	@echo "  make hpux9                for HP systems with HPUX 9.x"
-	@echo "  make hpux9-sl             for HP systems with HPUX 9.x, make shared libs"
-	@echo "  make hpux9-gcc            for HP systems with HPUX 9.x using GCC"
-	@echo "  make hpux9-gcc-sl         for HP systems with HPUX 9.x, GCC, make shared libs"
-	@echo "  make hpux10               for HP systems with HPUX 10.x"
-	@echo "  make hpux10-sl            for HP systems with HPUX 10.x, shared libs"
-	@echo "  make hpux10-gcc           for HP systems with HPUX 10.x w/ GCC"
-	@echo "  make hpux10-gcc-sl        for HP systems with HPUX 10.x w/ GCC, shared libs"
-	@echo "  make irix4                for SGI systems with IRIX 4.x"
-	@echo "  make irix5                for SGI systems with IRIX 5.x"
-	@echo "  make irix5-gcc            for SGI systems with IRIX 5.x using GCC"
-	@echo "  make irix5-dso            for SGI systems with IRIX 5.x, make DSOs"
-	@echo "  make irix6-o32            for SGI systems with IRIX 6.x, make o32-bit libs"
-	@echo "  make irix6-o32-dso        for SGI systems with IRIX 6.x, make o32-bit DSOs"
-	@echo "  make irix6-n32            for SGI systems with IRIX 6.x, make n32-bit libs"
-	@echo "  make irix6-n32-dso        for SGI systems with IRIX 6.x, make n32-bit DSOs"
-	@echo "  make irix6-gcc-n32-sl     for SGI systems with IRIX 6.x, GCC, make n32 DSOs"
-	@echo "  make irix6-64             for SGI systems with IRIX 6.x, make 64-bit libs"
-	@echo "  make irix6-64-dso         for SGI systems with IRIX 6.x, make 64-bit DSOs"
+	cdir src.X86.c
+	cdir src.X86.h
+	ifthere src.X86.3dnow/c then rename src.X86.3dnow/c src.X86.c.3dnow
+	ifthere src.X86.3dnow/h then rename src.X86.3dnow/h src.X86.h.3dnow
+	ifthere src.X86.assyntax/h then rename src.X86.assyntax/h src.X86.h.assyntax
+	ifthere src.X86.common_x86/c then rename src.X86.common_x86/c src.X86.c.common_x86
+	ifthere src.X86.common_x86asm/h then rename src.X86.common_x86asm/h src.X86.h.common_x86asm
+	ifthere src.X86.mmx/h then rename src.X86.mmx/h src.X86.h.mmx
+	ifthere src.X86.x86/c then rename src.X86.x86/c src.X86.c.x86
+	ifthere src.X86.x86/h then rename src.X86.x86/h src.X86.h.x86
+#	wipe src.X86.*/* ~C ~V ~R
+#	wipe src.DOS ~C ~V ~R
+#	wipe src.FX ~C ~V ~R
+#	wipe src.MGL ~C ~V ~R
+#	wipe src.SVGA ~C ~V ~R
+#	wipe src.Windows ~C ~V ~R
+#	wipe src.X ~C ~V ~R
+#	wipe src.*/* ~C ~V ~R
 
-	@echo "  make linux                for Linux systems, make shared .so libs"
-	@echo "  make linux-static         for Linux systems, make static .a libs"
-	@echo "  make linux-x86            for Linux on Intel, make shared .so libs"
-	@echo "  make linux-x86-static     for Linux on Intel, make static .a libs"
-	@echo "  make linux-ggi            for Linux systems with libggi"
-	@echo "  make linux-386-ggi        for Linux systems with libggi w/ Intel assembly"
-	@echo "  make linux-glide          for Linux w/ 3Dfx Glide driver"
-	@echo "  make linux-386-glide      for Linux w/ 3Dfx Glide driver, Intel assembly"
-	@echo "  make linux-386-opt-glide  for Linux with 3Dfx Voodoo1 for GLQuake"
-	@echo "  make linux-386-opt-V2-glide  for Linux with 3Dfx Voodoo2 for GLQuake"
-	@echo "  make linux-x86-glide      for Linux w/ all x86 asm for Glide"
-	@echo "  make linux-alpha          for Linux on Alpha systems"
-	@echo "  make linux-alpha-static   for Linux on Alpha systems, static libs"
-	@echo "  make linux-ppc            for Linux on PowerPC systems"
-	@echo "  make linux-ppc-static     for Linux on PowerPC systems, static libs"
-	@echo "  make linux-sparc          for Linux on Sparc systems"
-	@echo "  make linux-sparc5-elf     for Sparc5 systems, make ELF shared libs"
-	@echo "  make linux-sparc-ultra    for UltraSparc systems, make ELF shared libs"
-	@echo "  make lynxos               for LynxOS systems with GCC"
-	@echo "  make macintosh            for Macintosh"
-	@echo "  make machten-2.2          for Macs w/ MachTen 2.2 (68k w/ FPU)"
-	@echo "  make machten-4.0          for Macs w/ MachTen 4.0.1 or newer with GNU make"
-	@echo "  make mklinux              for Linux on Power Macintosh"
-	@echo "  make netbsd               for NetBSD 1.0 systems with GCC"
-	@echo "  make next                 for NeXT systems with NEXTSTEP 3.3"
-	@echo "  make openbsd              for OpenBSD systems"
-	@echo "  make openstep             for OpenStep/MacOSX Server systems"
-	@echo "  make os2-x11              for OS/2 with XFree86"
-	@echo "  make osf1                 for DEC Alpha systems with OSF/1"
-	@echo "  make osf1-sl              for DEC Alpha systems with OSF/1, make shared libs"
-	@echo "  make pgi-cygnus           for Cygnus with Portland Group, Inc. compiler"
-	@echo "  make pgi-mingw32          for mingW32 with Portland Group, Inc. compiler"
-	@echo "  make qnx                  for QNX V4 systems with Watcom compiler"
-	@echo "  make sco                  for SCO Unix systems with ODT"
-	@echo "  make sco5                 for SCO 5.0.5 OpenServer Unix"
-	@echo "  make solaris-x86          for PCs with Solaris"
-	@echo "  make solaris-x86-gcc      for PCs with Solaris using GCC"
-	@echo "  make sunos4               for Suns with SunOS 4.x"
-	@echo "  make sunos4-sl            for Suns with SunOS 4.x, make shared libs"
-	@echo "  make sunos4-gcc           for Suns with SunOS 4.x and GCC"
-	@echo "  make sunos4-gcc-sl        for Suns with SunOS 4.x, GCC, make shared libs"
-	@echo "  make sunos5               for Suns with SunOS 5.x"
-	@echo "  make sunos5-sl            for Suns with SunOS 5.x, make shared libs"
-	@echo "  make sunos5-ultra         for Sun UltraSPARCs with SunOS 5.x"
-	@echo "  make sunos5-ultra-sl      for Sun UltraSPARCs with SunOS 5.x, make shared libs"
-	@echo "  make sunos5-thread        for Suns with SunOS 5.x, using Solaris threads"
-	@echo "  make sunos5-pthread       for Suns with SunOS 5.[56] using POSIX threads"
-	@echo "  make sunos5-gcc-thread    for Suns with SunOS 5.x and GCC, using Solaris threads"
-	@echo "  make sunos5-gcc-pthread   for Suns with SunOS 5.[56] and GCC, using POSIX threads"
-	@echo "  make sunos5-gcc           for Suns with SunOS 5.x and GCC"
-	@echo "  make sunos5-gcc-sl        for Suns with SunOS 5.x, GCC, make shared libs"
-	@echo "  make sunos5-x11r6-gcc-sl  for Suns with X11R6, GCC, make shared libs"
-	@echo "  make sunos5-gcc-thread    for Suns with SunOS 5.x and GCC, using Solaris threads"
-	@echo "  make sunos5-gcc-pthread   for Suns with SunOS 5.[56] and GCC, using POSIX threads"
-	@echo "  make sunSolaris-CC        for Solaris using C++ compiler"
-	@echo "  make ultrix-gcc           for DEC systems with Ultrix and GCC"
-	@echo "  make unicos               for Cray C90 (and other?) systems"
-	@echo "  make unixware             for PCs running UnixWare"
-	@echo "  make unixware-shared      for PCs running UnixWare, shared libs"
-	@echo "  make uwin                 for Windows NT with AT&T/Wipro UWIN"
-	@echo "  make vistra               for Stardent Vistra systems"
-	@echo "  make clean                remove .o files"
-	@echo "  make realclean            remove .o, library and executable files"
+	cdir src-glu.c
+	cdir src-glu.h
+	ifthere src-glu.all/h then rename src-glu.all/h src-glu.h.all
+	ifthere src-glu.glu/c then rename src-glu.glu/c src-glu.c.glu
+	ifthere src-glu.gluP/h then rename src-glu.gluP/h src-glu.h.gluP
+	ifthere src-glu.mipmap/c then rename src-glu.mipmap/c src-glu.c.mipmap
+	ifthere src-glu.nurbs/c then rename src-glu.nurbs/c src-glu.c.nurbs
+	ifthere src-glu.nurbs/h then rename src-glu.nurbs/h src-glu.h.nurbs
+	ifthere src-glu.nurbscrv/c then rename src-glu.nurbscrv/c src-glu.c.nurbscrv
+	ifthere src-glu.nurbssrf/c then rename src-glu.nurbssrf/c src-glu.c.nurbssrf
+	ifthere src-glu.nurbsutl/c then rename src-glu.nurbsutl/c src-glu.c.nurbsutl
+	ifthere src-glu.polytest/c then rename src-glu.polytest/c src-glu.c.polytest
+	ifthere src-glu.project/c then rename src-glu.project/c src-glu.c.project
+	ifthere src-glu.quadric/c then rename src-glu.quadric/c src-glu.c.quadric
+	ifthere src-glu.tess/c then rename src-glu.tess/c src-glu.c.tess
+	ifthere src-glu.tess/h then rename src-glu.tess/h src-glu.h.tess
+	ifthere src-glu.tesselat/c then rename src-glu.tesselat/c src-glu.c.tesselat
+#	ifthere src-glu.tess_clip/c then rename src-glu.tess_clip/c src-glu.c.tess_clip
+#	ifthere src-glu.tess_clip/h then rename src-glu.tess_clip/h src-glu.h.tess_clip
+#	ifthere src-glu.tess_fist/c then rename src-glu.tess_fist/c src-glu.c.tess_fist
+#	ifthere src-glu.tess_fist/h then rename src-glu.tess_fist/h src-glu.h.tess_fist
+#	ifthere src-glu.tess_hash/c then rename src-glu.tess_hash/c src-glu.c.tess_hash
+#	ifthere src-glu.tess_hash/h then rename src-glu.tess_hash/h src-glu.h.tess_hash
+#	ifthere src-glu.tess_heap/c then rename src-glu.tess_heap/c src-glu.c.tess_heap
+#	ifthere src-glu.tess_heap/h then rename src-glu.tess_heap/h src-glu.h.tess_heap
+#	ifthere src-glu.tess_macros/h then rename src-glu.tess_macros/h src-glu.h.tess_macros
+#	ifthere src-glu.tess_typedefs/h then rename src-glu.tess_typedefs/h src-glu.h.tess_typedefs
+#	ifthere src-glu.tess_winding/c then rename src-glu.tess_winding/c src-glu.c.tess_winding
+#	ifthere src-glu.tess_winding/h then rename src-glu.tess_winding/h src-glu.h.tess_winding
 
+#	wipe src-glu.*/* ~C ~V ~R
 
+all :
+	@echo Entering src directory.
+	dir src
+	make -r
+	dir ^
+	@echo Entering src-glu directory.
+	dir src-glu
+	make -r
+	dir ^
+	@echo All done.
 
-aix aix-sl amix bsdos bsdos4 dgux freebsd freebsd-386 gcc \
-hpux9 hpux9-sl hpux9-gcc hpux9-gcc-sl \
-hpux10 hpux10-sl hpux10-gcc hpux10-gcc-sl \
-irix4 irix5 irix5-gcc irix5-dso irix6-o32 irix6-o32-dso \
-linux linux-static linux-debug linux-static-debug linux-prof \
-linux-x86 linux-x86-static linux-x86-debug \
-linux-glide linux-386-glide linux-386-opt-glide \
-linux-386-opt-V2-glide linux-x86-glide linux-glide-debug linux-glide-prof \
-linux-alpha-static linux-alpha \
-linux-ppc-static linux-ppc \
-linux-sparc \
-linux-sparc5-elf \
-linux-sparc-ultra \
-lynxos machten-2.2 machten-4.0 \
-mklinux netbsd osf1 osf1-sl openbsd qnx sco sco5 \
-solaris-x86 solaris-x86-gcc sunSolaris-CC \
-sunos4 sunos4-sl sunos4-gcc sunos4-gcc-sl sunos4-gcc-x11r6-sl \
-sunos5 sunos5-sl sunos5-ultra sunos5-ultra-sl sunos5-gcc sunos5-gcc-sl \
-sunos5-thread sunos5-pthread sunos5-gcc-thread sunos5-gcc-pthread \
-sunos5-x11r6-gcc-sl ultrix-gcc unicos unixware uwin vistra:
-	-mkdir lib
-	if [ -d src      ] ; then touch src/depend      ; fi
-	if [ -d src-glu  ] ; then touch src-glu/depend  ; fi
-	if [ -d src-glut ] ; then touch src-glut/depend ; fi
-	if [ -d widgets-sgi ] ; then touch widgets-sgi/depend ; fi
-	if [ -d src      ] ; then cd src      ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d src-glu  ] ; then cd src-glu  ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d src-glut ] ; then cd src-glut ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d demos    ] ; then cd demos    ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d xdemos   ] ; then cd xdemos   ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d samples  ] ; then cd samples  ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d book     ] ; then cd book     ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d widgets-sgi ] ; then cd widgets-sgi; $(MAKE) -f Makefile.X11 $@ ; fi
-
-irix6-n32 irix6-n32-dso irix6-gcc-n32-sl irix-debug:
-	-mkdir lib32
-	if [ -d src      ] ; then touch src/depend      ; fi
-	if [ -d src-glu  ] ; then touch src-glu/depend  ; fi
-	if [ -d src-glut ] ; then touch src-glut/depend ; fi
-	if [ -d src-glut ] ; then touch src-glut/depend ; fi
-	if [ -d widgets-sgi ] ; then touch widgets-sgi/depend ; fi
-	if [ -d src      ] ; then cd src      ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d src-glu  ] ; then cd src-glu  ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d src-glut ] ; then cd src-glut ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d demos    ] ; then cd demos    ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d xdemos   ] ; then cd xdemos   ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d samples  ] ; then cd samples  ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d book     ] ; then cd book     ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d widgets-sgi ] ; then cd widgets-sgi; $(MAKE) -f Makefile.X11 $@ ; fi
-
-
-irix6-64 irix6-64-dso:
-	-mkdir lib64
-	touch src/depend
-	touch src-glu/depend
-	if [ -d src-glut ] ; then touch src-glut/depend ; fi
-	if [ -d widgets-sgi ] ; then touch widgets-sgi/depend ; fi
-	if [ -d src      ] ; then cd src      ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d src-glu  ] ; then cd src-glu  ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d src-glut ] ; then cd src-glut ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d demos    ] ; then cd demos    ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d xdemos   ] ; then cd xdemos   ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d samples  ] ; then cd samples  ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d book     ] ; then cd book     ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d widgets-sgi ] ; then cd widgets-sgi; $(MAKE) -f Makefile.X11 $@ ; fi
-
-
-amiwin:
-	bin/mklib.amiwin
-
-
-beos-r4:
-	-mkdir lib
-	-rm src/depend
-	touch src/depend
-	-rm src-glu/depend
-	touch src-glu/depend
-	if [ -d src     ] ; then cd src     ; $(MAKE) -f Makefile.BeOS-R4 $@ ; fi
-	if [ -d src-glu ] ; then cd src-glu ; $(MAKE) -f Makefile.BeOS-R4 $@ ; fi
-	if [ -d BeOS    ] ; then cd BeOS    ; $(MAKE)                        ; fi
-	if [ -d src-glut.beos ] ; then cd src-glut.beos ; $(MAKE)            ; fi
-	if [ -d src-glut.beos ] ; then cp src-glut.beos/obj*/libglut.so lib  ; fi
-	if [ -d demos   ] ; then cd demos   ; $(MAKE) -f Makefile.BeOS-R4 $@ ; fi
-	if [ -d samples ] ; then cd samples ; $(MAKE) -f Makefile.BeOS-R4 $@ ; fi
-	if [ -d book    ] ; then cd book    ; $(MAKE) -f Makefile.BeOS-R4 $@ ; fi
-
-pgi-cygnus pgi-mingw32 \
-cygnus cygnus-linux:
-	-mkdir lib
-	touch src/depend
-	touch src-glu/depend
-	if [ -d widgets-sgi ] ; then touch widgets-sgi/depend ; fi
-	if [ -d src      ] ; then cd src      ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d src-glu  ] ; then cd src-glu  ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d src-glut ] ; then cd src-glut ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d demos    ] ; then cd demos    ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d xdemos   ] ; then cd xdemos   ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d widgets-sgi ] ; then cd widgets-sgi; $(MAKE) -f Makefile.X11 $@ ; fi
-
-macintosh:
-	@echo "See the README file for Macintosh intallation information"
-
-next:
-	-mkdir lib
-	cd src ; $(MAKE) -f Makefile.X11 "MYCC=${CC}" $@
-	cd src-glu ; $(MAKE) -f Makefile.X11 "MYCC=${CC}" $@
-
-openstep:
-	-mkdir lib
-	cd src ; $(MAKE) -f Makefile.X11 "MYCC=${CC}" $@
-	cd src-glu ; $(MAKE) -f Makefile.X11 "MYCC=${CC}" $@
-
-os2-x11:
-	if not EXIST .\lib md lib
-	touch src/depend
-	touch src-glu/depend
-	if exist src-glut touch src-glut/depend
-	cd src     & make -f Makefile.X11 $@
-	cd src-glu & make -f Makefile.X11 $@
-	if exist src-glut  cd src-glut & make -f Makefile.X11 $@
-	if exist demos     cd demos    & make -f Makefile.X11 $@
-	if exist xdemos    cd xdemos   & make -f Makefile.X11 $@
-	if exist samples   cd samples  & make -f Makefile.X11 $@
-	if exist book      cd book     & make -f Makefile.X11 $@
-
-linux-ggi linux-386-ggi:
-	-mkdir lib
-	touch src/depend
-	touch src-glu/depend
-	if [ -d src-glut        ] ; then touch src-glut/depend ; fi
-	if [ -d widgets-sgi     ] ; then touch widgets-sgi/depend ; fi
-	if [ -d ggi             ] ; then touch ggi/depend      ; fi
-	if [ -d src             ] ; then cd src ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d src/GGI/default ] ; then cd src/GGI/default ; $(MAKE)      ; fi
-	if [ -d src/GGI/display ] ; then cd src/GGI/display ; $(MAKE)      ; fi
-	if [ -d src-glut ] ; then cd src-glu  ; $(MAKE) -f Makefile.X11 $@ ; fi
-#	if [ -d src-glut ] ; then cd src-glut ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d ggi ]      ; then cd ggi      ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d ggi ]      ; then cd ggi/demos; $(MAKE)                    ; fi
-	if [ -d demos ]    ; then cd demos    ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d xdemos ]   ; then cd xdemos   ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d samples ]  ; then cd samples  ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d book ]     ; then cd book     ; $(MAKE) -f Makefile.X11 $@ ; fi
-	if [ -d widgets-sgi ] ; then cd widgets-sgi; $(MAKE) -f Makefile.X11 $@ ; fi
-
-# if you change GGI_DEST please change it in ggimesa.conf, too.
-DESTDIR=/usr/local
-GGI_DEST=lib/ggi/mesa
-
-linux-ggi-install linux-386-ggi-install:
-	install -d $(DESTDIR)/$(GGI_DEST)/default $(DESTDIR)/$(GGI_DEST)/display $(DESTDIR)/etc/ggi
-	install -m 0755 src/GGI/default/*.so $(DESTDIR)/$(GGI_DEST)/default
-	install -m 0755 src/GGI/display/*.so $(DESTDIR)/$(GGI_DEST)/display
-	install -m 0644 src/GGI/ggimesa.conf $(DESTDIR)/etc/ggi
-#	if [ -z "`grep ggimesa $(DESTDIR)/etc/ggi/libggi.conf`" ]; then \
-#	echo ".include $(DESTDIR)/etc/ggi/ggimesa.conf" >> $(DESTDIR)/etc/ggi/libggi.conf ; \
-#	fi
-
-# Remove .o files, emacs backup files, etc.
-clean:
-	-rm -f ggi/*~ *.o
-	-rm -f src/GGI/default/*~ *.so
-	-rm -f src/GGI/display/*~ *.so
-	-rm -f include/*~
-	-rm -f include/GL/*~
-	-rm -f src/*.o src/*~ src/*.a src/*/*.o src/*/*~
-	-rm -f src-glu/*.o src-glu/*~ src-glu/*.a
-	-rm -f src-glut/*.o
-	-rm -f demos/*.o
-	-rm -f book/*.o book/*~
-	-rm -f xdemos/*.o xdemos/*~
-	-rm -f samples/*.o samples/*~
-	-rm -f ggi/*.o ggi/demos/*.o ggi/*.a
-	-rm -f widgets-sgi/*.o
-	-rm -f widgets-mesa/*/*.o
-
-# Remove everything that can be remade
-realclean: clean
-	-rm -f lib/*
-	cd demos       && $(MAKE) -f Makefile.X11 realclean || true
-	cd xdemos      && $(MAKE) -f Makefile.X11 realclean || true
-	cd book        && $(MAKE) -f Makefile.X11 realclean || true
-	cd samples     && $(MAKE) -f Makefile.X11 realclean || true
-	cd ggi/demos   && $(MAKE) -f Makefile.X11 realclean || true
-	cd src/GGI/default && $(MAKE) -f Makefile.X11 realclean || true
-
-
-
-DIRECTORY = Mesa-3.4.1
-LIB_NAME = MesaLib-3.4.1
-DEMO_NAME = MesaDemos-3.4.1
-GLU_NAME = MesaGLU-3.4.1
-GLUT_NAME = GLUT-3.7
-
-
-LIB_FILES =	\
-	$(DIRECTORY)/Makefile*			\
-	$(DIRECTORY)/Make-config		\
-	$(DIRECTORY)/acconfig.h			\
-	$(DIRECTORY)/acinclude.m4		\
-	$(DIRECTORY)/aclocal.m4			\
-	$(DIRECTORY)/conf.h.in			\
-	$(DIRECTORY)/config.guess		\
-	$(DIRECTORY)/config.sub			\
-	$(DIRECTORY)/configure			\
-	$(DIRECTORY)/configure.in		\
-	$(DIRECTORY)/install-sh			\
-	$(DIRECTORY)/ltconfig			\
-	$(DIRECTORY)/ltmain.sh			\
-	$(DIRECTORY)/missing			\
-	$(DIRECTORY)/mkinstalldirs		\
-	$(DIRECTORY)/stamp-h.in			\
-	$(DIRECTORY)/docs/CONFIG		\
-	$(DIRECTORY)/docs/CONFORM		\
-	$(DIRECTORY)/docs/COPYING		\
-	$(DIRECTORY)/docs/COPYRIGHT		\
-	$(DIRECTORY)/docs/DEVINFO		\
-	$(DIRECTORY)/docs/IAFA-PACKAGE		\
-	$(DIRECTORY)/docs/INSTALL		\
-	$(DIRECTORY)/docs/INSTALL.GNU		\
-	$(DIRECTORY)/docs/README		\
-	$(DIRECTORY)/docs/README.*		\
-	$(DIRECTORY)/docs/RELNOTES*		\
-	$(DIRECTORY)/docs/VERSIONS		\
-	$(DIRECTORY)/docs/*.spec		\
-	$(DIRECTORY)/bin/README			\
-	$(DIRECTORY)/bin/mklib*			\
-	$(DIRECTORY)/*.BAT			\
-	$(DIRECTORY)/*.bat			\
-	$(DIRECTORY)/descrip.mms		\
-	$(DIRECTORY)/mms-config			\
-	$(DIRECTORY)/xlib.opt			\
-	$(DIRECTORY)/STARTUP.MK			\
-	$(DIRECTORY)/mesawin32.mak		\
-	$(DIRECTORY)/Names.win			\
-	$(DIRECTORY)/win32-openstep.sh		\
-	$(DIRECTORY)/common.dja			\
-	$(DIRECTORY)/include/GL/Makefile.in	\
-	$(DIRECTORY)/include/GL/Makefile.am	\
-	$(DIRECTORY)/include/GL/dosmesa.h	\
-	$(DIRECTORY)/include/GL/amesa.h		\
-	$(DIRECTORY)/include/GL/fxmesa.h	\
-	$(DIRECTORY)/include/GL/ggimesa.h	\
-	$(DIRECTORY)/include/GL/gl.h		\
-	$(DIRECTORY)/include/GL/glext.h		\
-	$(DIRECTORY)/include/GL/gl_mangle.h	\
-	$(DIRECTORY)/include/GL/glu.h		\
-	$(DIRECTORY)/include/GL/glu_mangle.h	\
-	$(DIRECTORY)/include/GL/glx.h		\
-	$(DIRECTORY)/include/GL/glx_mangle.h	\
-	$(DIRECTORY)/include/GL/mesa_wgl.h	\
-	$(DIRECTORY)/include/GL/mglmesa.h	\
-	$(DIRECTORY)/include/GL/osmesa.h	\
-	$(DIRECTORY)/include/GL/svgamesa.h	\
-	$(DIRECTORY)/include/GL/wmesa.h		\
-	$(DIRECTORY)/include/GL/xmesa.h		\
-	$(DIRECTORY)/include/GL/xmesa_x.h	\
-	$(DIRECTORY)/include/GL/xmesa_xf86.h	\
-	$(DIRECTORY)/include/GLView.h		\
-	$(DIRECTORY)/include/Makefile.in	\
-	$(DIRECTORY)/include/Makefile.am	\
-	$(DIRECTORY)/src/Makefile*		\
-	$(DIRECTORY)/src/descrip.mms		\
-	$(DIRECTORY)/src/mms_depend		\
-	$(DIRECTORY)/src/mesa.conf		\
-	$(DIRECTORY)/src/*.def			\
-	$(DIRECTORY)/src/depend			\
-	$(DIRECTORY)/src/*.[chS]		\
-	$(DIRECTORY)/src/Allegro/*.[ch]		\
-	$(DIRECTORY)/src/BeOS/*.cpp		\
-	$(DIRECTORY)/src/D3D/*.cpp		\
-	$(DIRECTORY)/src/D3D/*.CPP		\
-	$(DIRECTORY)/src/D3D/*.h		\
-	$(DIRECTORY)/src/D3D/*.H		\
-	$(DIRECTORY)/src/D3D/*.c		\
-	$(DIRECTORY)/src/D3D/*.C		\
-	$(DIRECTORY)/src/D3D/MAKEFILE		\
-	$(DIRECTORY)/src/D3D/*bat		\
-	$(DIRECTORY)/src/D3D/*DEF		\
-	$(DIRECTORY)/src/DOS/DEPEND.DOS		\
-	$(DIRECTORY)/src/DOS/*.c		\
-	$(DIRECTORY)/src/FX/Makefile.am		\
-	$(DIRECTORY)/src/FX/Makefile.in		\
-	$(DIRECTORY)/src/FX/*.[ch]		\
-	$(DIRECTORY)/src/FX/*.def		\
-	$(DIRECTORY)/src/FX/X86/Makefile.am	\
-	$(DIRECTORY)/src/FX/X86/Makefile.in	\
-	$(DIRECTORY)/src/FX/X86/*.[Shc]		\
-	$(DIRECTORY)/src/GGI/Makefile.am			\
-	$(DIRECTORY)/src/GGI/Makefile.in			\
-	$(DIRECTORY)/src/GGI/*.[ch]				\
-	$(DIRECTORY)/src/GGI/ggimesa.conf.in			\
-	$(DIRECTORY)/src/GGI/default/*.c			\
-	$(DIRECTORY)/src/GGI/default/Makefile.am		\
-	$(DIRECTORY)/src/GGI/default/Makefile.in		\
-	$(DIRECTORY)/src/GGI/default/genkgi.conf.in		\
-	$(DIRECTORY)/src/GGI/display/*.c			\
-	$(DIRECTORY)/src/GGI/display/Makefile.am		\
-	$(DIRECTORY)/src/GGI/display/Makefile.in		\
-	$(DIRECTORY)/src/GGI/display/fbdev.conf.in		\
-	$(DIRECTORY)/src/GGI/include/Makefile.am		\
-	$(DIRECTORY)/src/GGI/include/Makefile.in		\
-	$(DIRECTORY)/src/GGI/include/ggi/Makefile.am		\
-	$(DIRECTORY)/src/GGI/include/ggi/Makefile.in		\
-	$(DIRECTORY)/src/GGI/include/ggi/mesa/Makefile.am	\
-	$(DIRECTORY)/src/GGI/include/ggi/mesa/Makefile.in	\
-	$(DIRECTORY)/src/GGI/include/ggi/mesa/*.h		\
-	$(DIRECTORY)/src/KNOWN_BUGS				\
-	$(DIRECTORY)/src/OSmesa/Makefile.am			\
-	$(DIRECTORY)/src/OSmesa/Makefile.in			\
-	$(DIRECTORY)/src/OSmesa/*.[ch]				\
-	$(DIRECTORY)/src/S3/*.[ch]				\
-	$(DIRECTORY)/src/S3/*.def				\
-	$(DIRECTORY)/src/S3/*.mak				\
-	$(DIRECTORY)/src/S3/*.rc				\
-	$(DIRECTORY)/src/SVGA/Makefile.am			\
-	$(DIRECTORY)/src/SVGA/Makefile.in			\
-	$(DIRECTORY)/src/SVGA/*.[ch]				\
-	$(DIRECTORY)/src/Windows/*.[ch]				\
-	$(DIRECTORY)/src/Windows/*.def				\
-	$(DIRECTORY)/src/X/Makefile.am				\
-	$(DIRECTORY)/src/X/Makefile.in				\
-	$(DIRECTORY)/src/X/*.[ch]				\
-	$(DIRECTORY)/src/X86/*.[ch]				\
-	$(DIRECTORY)/src/X86/Makefile.am			\
-	$(DIRECTORY)/src/X86/Makefile.in			\
-	$(DIRECTORY)/src/X86/*.S				\
-	$(DIRECTORY)/src-glu/README[12]				\
-	$(DIRECTORY)/src-glu/Makefile*				\
-	$(DIRECTORY)/src-glu/descrip.mms			\
-	$(DIRECTORY)/src-glu/mms_depend				\
-	$(DIRECTORY)/src-glu/*.def				\
-	$(DIRECTORY)/src-glu/depend				\
-	$(DIRECTORY)/src-glu/*.[ch]				\
-	$(DIRECTORY)/widgets-mesa/ChangeLog			\
-	$(DIRECTORY)/widgets-mesa/INSTALL			\
-	$(DIRECTORY)/widgets-mesa/Makefile.in			\
-	$(DIRECTORY)/widgets-mesa/README			\
-	$(DIRECTORY)/widgets-mesa/TODO				\
-	$(DIRECTORY)/widgets-mesa/configure			\
-	$(DIRECTORY)/widgets-mesa/configure.in			\
-	$(DIRECTORY)/widgets-mesa/demos/ChangeLog		\
-	$(DIRECTORY)/widgets-mesa/demos/Cube			\
-	$(DIRECTORY)/widgets-mesa/demos/Ed			\
-	$(DIRECTORY)/widgets-mesa/demos/Makefile.in		\
-	$(DIRECTORY)/widgets-mesa/demos/Mcube			\
-	$(DIRECTORY)/widgets-mesa/demos/Tea			\
-	$(DIRECTORY)/widgets-mesa/demos/*.[ch]			\
-	$(DIRECTORY)/widgets-mesa/demos/events			\
-	$(DIRECTORY)/widgets-mesa/include/GL/ChangeLog		\
-	$(DIRECTORY)/widgets-mesa/include/GL/*.h		\
-	$(DIRECTORY)/widgets-mesa/include/GL/Makefile.in	\
-	$(DIRECTORY)/widgets-mesa/man/ChangeLog			\
-	$(DIRECTORY)/widgets-mesa/man/GL*			\
-	$(DIRECTORY)/widgets-mesa/man/Makefile.in		\
-	$(DIRECTORY)/widgets-mesa/man/Mesa*			\
-	$(DIRECTORY)/widgets-mesa/src/ChangeLog			\
-	$(DIRECTORY)/widgets-mesa/src/*.c			\
-	$(DIRECTORY)/widgets-mesa/src/Makefile.in		\
-	$(DIRECTORY)/widgets-sgi/*.[ch]				\
-	$(DIRECTORY)/widgets-sgi/Makefile*			\
-	$(DIRECTORY)/widgets-sgi/README				\
-	$(DIRECTORY)/util/README				\
-	$(DIRECTORY)/util/Makefile.am				\
-	$(DIRECTORY)/util/Makefile.in				\
-	$(DIRECTORY)/util/*.[ch]				\
-	$(DIRECTORY)/util/sampleMakefile			\
-	$(DIRECTORY)/vms/analyze_map.com			\
-	$(DIRECTORY)/vms/xlib.opt				\
-	$(DIRECTORY)/vms/xlib_share.opt				\
-	$(DIRECTORY)/BeOS/Makefile				\
-	$(DIRECTORY)/BeOS/*.cpp					\
-	$(DIRECTORY)/WIN32/NMAKE.MAK				\
-	$(DIRECTORY)/WIN32/NMAKE.MIF				\
-	$(DIRECTORY)/WIN32/RES/*rc				\
-	$(DIRECTORY)/WIN32/RES/*def				\
-	$(DIRECTORY)/WIN32/RULES/lib.*				\
-	$(DIRECTORY)/WIN32/RULES/progs.*			\
-	$(DIRECTORY)/macos/README				\
-	$(DIRECTORY)/macos/gli_api/*.h				\
-	$(DIRECTORY)/macos/cglpane/CGLPane.*			\
-	$(DIRECTORY)/macos/include-mac/*.h			\
-	$(DIRECTORY)/macos/libraries/*.stub			\
-	$(DIRECTORY)/macos/libraries/*Stub			\
-	$(DIRECTORY)/macos/projects/*.mcp			\
-	$(DIRECTORY)/macos/projects/*.exp			\
-	$(DIRECTORY)/macos/projects/*.h				\
-	$(DIRECTORY)/macos/resources/*.c			\
-	$(DIRECTORY)/macos/resources/*.r			\
-	$(DIRECTORY)/macos/resources/*.rsrc			\
-	$(DIRECTORY)/macos/src-agl/*.exp			\
-	$(DIRECTORY)/macos/src-agl/*.[ch]			\
-	$(DIRECTORY)/macos/src-gli/*.[ch]			\
-	$(DIRECTORY)/OpenStep
-
-DEMO_FILES =	\
-	$(DIRECTORY)/include/GL/glut.h		\
-	$(DIRECTORY)/include/GL/glutf90.h	\
-	$(DIRECTORY)/include/GL/glut_h.dja	\
-	$(DIRECTORY)/src-glut/Makefile*		\
-	$(DIRECTORY)/src-glut/depend		\
-	$(DIRECTORY)/src-glut/*def		\
-	$(DIRECTORY)/src-glut/descrip.mms	\
-	$(DIRECTORY)/src-glut/mms_depend	\
-	$(DIRECTORY)/src-glut/*.[ch]		\
-	$(DIRECTORY)/src-glut.dja/*		\
-	$(DIRECTORY)/src-glut.beos/Makefile	\
-	$(DIRECTORY)/src-glut.beos/*.cpp	\
-	$(DIRECTORY)/src-glut.beos/*.h		\
-	$(DIRECTORY)/images/*			\
-	$(DIRECTORY)/demos/Makefile*		\
-	$(DIRECTORY)/demos/descrip.mms		\
-	$(DIRECTORY)/demos/*.[ch]		\
-	$(DIRECTORY)/demos/*.cxx		\
-	$(DIRECTORY)/demos/*.dat		\
-	$(DIRECTORY)/demos/README		\
-	$(DIRECTORY)/xdemos/Makefile*		\
-	$(DIRECTORY)/xdemos/descrip.mms		\
-	$(DIRECTORY)/xdemos/*.[cf]		\
-	$(DIRECTORY)/book/Makefile*		\
-	$(DIRECTORY)/book/README		\
-	$(DIRECTORY)/book/*.[ch]		\
-	$(DIRECTORY)/samples/Makefile*		\
-	$(DIRECTORY)/samples/README		\
-	$(DIRECTORY)/samples/*.c		\
-	$(DIRECTORY)/mtdemos			\
-	$(DIRECTORY)/ggi
-
-GLU_FILES = \
-	$(DIRECTORY)/Makefile*			\
-	$(DIRECTORY)/Make-config		\
-	$(DIRECTORY)/bin/mklib*			\
-	$(DIRECTORY)/include/GL/gl.h		\
-	$(DIRECTORY)/include/GL/gl_mangle.h	\
-	$(DIRECTORY)/include/GL/glext.h		\
-	$(DIRECTORY)/include/GL/glu.h		\
-	$(DIRECTORY)/include/GL/glu_mangle.h	\
-	$(DIRECTORY)/src-glu/README[12]		\
-	$(DIRECTORY)/src-glu/Makefile*		\
-	$(DIRECTORY)/src-glu/descrip.mms	\
-	$(DIRECTORY)/src-glu/mms_depend		\
-	$(DIRECTORY)/src-glu/*.def		\
-	$(DIRECTORY)/src-glu/depend		\
-	$(DIRECTORY)/src-glu/*.[ch]
-
-GLUT_FILES = \
-	$(DIRECTORY)/Makefile*			\
-	$(DIRECTORY)/Make-config		\
-	$(DIRECTORY)/bin/mklib*			\
-	$(DIRECTORY)/include/GL/gl.h		\
-	$(DIRECTORY)/include/GL/gl_mangle.h	\
-	$(DIRECTORY)/include/GL/glext.h		\
-	$(DIRECTORY)/include/GL/glu.h		\
-	$(DIRECTORY)/include/GL/glu_mangle.h	\
-	$(DIRECTORY)/include/GL/glut.h		\
-	$(DIRECTORY)/include/GL/glutf90.h	\
-	$(DIRECTORY)/include/GL/glut_h.dja	\
-	$(DIRECTORY)/src-glut/Makefile*		\
-	$(DIRECTORY)/src-glut/depend		\
-	$(DIRECTORY)/src-glut/*def		\
-	$(DIRECTORY)/src-glut/descrip.mms	\
-	$(DIRECTORY)/src-glut/mms_depend	\
-	$(DIRECTORY)/src-glut/*.[ch]		\
-	$(DIRECTORY)/src-glut.dja/*		\
-	$(DIRECTORY)/src-glut.beos/Makefile	\
-	$(DIRECTORY)/src-glut.beos/*.cpp	\
-	$(DIRECTORY)/src-glut.beos/*.h
-
-
-lib_tar:
-	cp Makefile.X11 Makefile ; \
-	cd .. ; \
-	tar -cvf $(LIB_NAME).tar $(LIB_FILES) ; \
-	gzip $(LIB_NAME).tar ; \
-	mv $(LIB_NAME).tar.gz $(DIRECTORY)
-
-demo_tar:
-	cd .. ; \
-	tar -cvf $(DEMO_NAME).tar $(DEMO_FILES) ; \
-	gzip $(DEMO_NAME).tar ; \
-	mv $(DEMO_NAME).tar.gz $(DIRECTORY)
-
-glu_tar:
-	cp Makefile.X11 Makefile ; \
-	cd .. ; \
-	tar -cvf $(GLU_NAME).tar $(GLU_FILES) ; \
-	gzip $(GLU_NAME).tar ; \
-	mv $(GLU_NAME).tar.gz $(DIRECTORY)
-
-glut_tar:
-	cp Makefile.X11 Makefile ; \
-	cd .. ; \
-	tar -cvf $(GLUT_NAME).tar $(GLUT_FILES) ; \
-	gzip $(GLUT_NAME).tar ; \
-	mv $(GLUT_NAME).tar.gz $(DIRECTORY)
-
-
-lib_zip:
-	-rm $(LIB_NAME).zip ; \
-	cp Makefile.X11 Makefile ; \
-	cd .. ; \
-	zip -r $(LIB_NAME).zip $(LIB_FILES) ; \
-	mv $(LIB_NAME).zip $(DIRECTORY)
-
-demo_zip:
-	-rm $(DEMO_NAME).zip ; \
-	cd .. ; \
-	zip -r $(DEMO_NAME).zip $(DEMO_FILES) ; \
-	mv $(DEMO_NAME).zip $(DIRECTORY)
-
-
-
-SRC_FILES =	\
-	RELNOTES		\
-	src/Makefile*		\
-	src/depend		\
-	src/*.[chS]		\
-	src/*/*.[ch]		\
-	include/GL/*.h
-
-srctar:
-	tar -cvf src.tar $(SRC_FILES) ; \
-	gzip src.tar
-
-srctar.zip:
-	-rm src.zip
-	zip -r src.zip $(SRC_FILES) ; \
+clean :
+	wipe src.o.* ~C ~V
+	wipe src-glu.o.* ~C ~V

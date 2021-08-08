@@ -1,0 +1,478 @@
+Mesa library renderer for Acorn RISC OS (version 0.37a1 release for Mesa 3.4.2)
+
+Mesa author:		Brian Paul (brian@mesa3d.org)
+
+RISC OS renderer
+additions; author of
+this document:		David Boddie (davidb@mcs.st-and.ac.uk)
+
+This file created:	Tue 10th February 1998
+     last updated:	Mon 04th June 2001
+
+
+Contents ------------------------------------------------------------------------
+
+Disclaimer
+
+Introduction		- What is Mesa?
+
+Documentation		- How do I use this driver?
+
+Distribution		- A description of the files I have included.
+Requirements		- Memory, disc space, tools required.
+
+Installation		- A summary of the steps necessary to compile Mesa.
+
+Demos			- Where are they?
+
+GLUT			- A toolkit for OpenGL/Mesa.
+PyOpenGL		- Support for a OpenGL wrapper for Python.
+
+Threading		- Support for threading using Mesa.
+
+Comments/Contacts	- Who to contact.
+
+Acknowledgements
+
+History			- Summary of versions.
+
+
+Disclaimer ----------------------------------------------------------------------
+
+This software is subject to the conditions of the GNU Library General Public
+License. Please read the file, "COPYING" which is taken from the Mesa
+distribution.
+
+
+Introduction --------------------------------------------------------------------
+
+Mesa is a 3D graphics library which provides an API similar to that of
+OpenGL 1.2.
+
+This package is the contains the driver for RISC OS. It is currently designed to
+write to areas of memory in one of three formats of bitmap native to RISC OS
+using the VIDC20 graphics hardware although machines with a VIDC10 chip should be
+able to display 256 colour graphics using Mesa. You need the main distribution
+for Mesa 3.4.1 to be able to use this driver, although Mesa 3.4 may also work.
+
+This driver is predominantly based on Brian Paul's off-screen renderer (OSMesa)
+with modifications to enable writing to RISC OS screen modes.
+
+Aside: Version 3.3 of Mesa appears to introduce a number of new interfaces for
+device driver functions which will need to be implemented. When this work is
+done then it may be useful to include functionality allowing the driver to
+render directly to the work area of a window on screen.
+
+
+Documentation -------------------------------------------------------------------
+
+On other platforms there are libraries, such as GLUT, which conveniently hide
+system dependent details from users, allowing portable applications to be written
+using OpenGL or Mesa.
+
+Since there is no known high level library available for RISC OS which performs
+the same task, it is necessary for the programmer to know about the device driver
+functions provided by this distribution. These are documented in a StrongHelp
+manual included in this distribution. The usage of these functions is illustrated
+in the many example programs to be found in the demonstrations archive which is
+available at
+
+	http://www-solar.mcs.st-and.ac.uk/~davidb/Mesa/Software/rosd.zip
+
+
+Distribution --------------------------------------------------------------------
+
+The distribution is as follows:
+
+docs
+	COPYING			Copying Mesa and its drivers
+	COPYRIGHT		More information about copying
+	README/RISCOS
+	ROSMesa			A StrongHelp manual describing the device driver
+				functions
+
+include
+
+	GL
+		rosmesa.h	Header file for ROSMesa functions
+
+	glaux.h			Header files for old libraries
+	gltk.h
+
+Make-cfg			Configuration details for compilation tools
+
+Makefile			Replaces the original Makefile and provides
+				installation of the distribution to a RISC OS
+				directory structure
+
+src
+
+	Makefile		Builds the driver and replaces the original
+				Makefile
+
+	RISCOS
+
+		rosmesa.c	The main driver source
+		colours.c	Palette information for 256 colour modes
+		xform_c.c	Unused transformation routines
+		ros_asm.h	Header file for assembler functions
+		ros_asm.s	Assembler functions for pixel span writing
+		xform_asm.s	Unused transformation routines
+
+src-glu
+
+	Makefile		Replacement Makefile for the GLU library
+
+
+Requirements --------------------------------------------------------------------
+
+	* C compiler (gcc, Norcroft C, or Easy C)
+
+		Look at http://hard-mofo.dsvr.net/ for gcc.
+
+	* Assembler (as)
+
+		Comes with gcc - used for some of the rendering functions.
+
+	* Linker (e.g. drlink)
+
+		You should already have one of these if you have a C compiler.
+
+	* Make utility (GNU Make)
+
+		The port of GNU make at
+
+		ftp://ftp.uni-stuttgart.de/pub/systems/acorn/riscos/unixtools/gnu/make.absolute
+		http://www-solar.mcs.st-and.ac.uk/~davidb/Mesa/Software/make.absolute
+
+		works quite well.
+
+		Note: AMU doesn't work with the Makefiles supplied with this
+		package.
+
+	* Libaries to link with (UnixLib or Clib).
+
+	* A filing system which allows long file names and more than 77 files per
+	  directory.
+	  
+		This is required to at least install the Mesa distribution.
+		I recommend raFS which can be obtained at
+
+		http://www.informatik.tu-muenchen.de/~atterer/riscos/rafs116.zip
+
+
+Generally, I would recommend gcc, UnixLib, and GNU Make. These are all free and
+should be fairly easy to set up. If you have RISC OS 4 then you don't need raFS.
+
+From experience, I have found that 8MB of memory, and greater than 6MB of
+hard disc space are sufficient to compile the libraries and example programs,
+but not enough to allow them to run while memory is reserved for compilers in
+taskwindows. Quitting taskwindows every now and then to run demo programs and
+starting new ones used to cause rather nasty crashes on my machine when it only
+had 8MB of memory.
+
+Follow the guidelines on memory requirements given by your compiler's
+documentation. Attempting to compile from a taskwindow with insufficient
+memory supplied is usually a bad idea.
+
+The extremely useful utility, makeALF, is required if the memory requirements
+mentioned in the Demos section (below) are going to be in any way realistic
+for an 8MB machine. Simply linking the components of the library together, as
+the Makefiles ask the linker to do, apparently produces object files which,
+when linked to application programs, require more than 8MB of memory. This
+is despite the executables being similar sizes. For some reason, using
+makeALF solves this problem.
+
+
+Installation --------------------------------------------------------------------
+
+This is what you need to do to build the Mesa library and the supporting GLU
+library.
+
+* Unpack the main Mesa distribution into a filing system which satisfies the
+  above criteria: long filenames and more than 77 files per directory. You
+  may experience complaints from the filer about files in the "macos" directory;
+  ignore them by clicking on the "Skip" button in the filer.
+
+* Copy the contents of the "Mesa" directory from the driver archive into the
+  main Mesa directory. You should now have a directory which contains the
+  standard Mesa distribution, but now has a directory inside the "src" directory
+  called "RISCOS", for example.
+
+* Open a taskwindow, or press F12 to get a command line and set the current
+  directory to the main Mesa directory. For example:
+
+	dir raFS::Mesa.$
+
+* At the command line, in the installation directory type:
+
+	make -r install
+
+  This should do things like create "c" and "h" directories in the "src"
+  directory and rename files ending with "/c" and "/h" so that they now reside
+  in those directories.
+
+* Now type:
+
+	make -r all
+
+  Hopefully, everything should go as planned and two libraries, libGL and libGLU,
+  should be present in the newly created lib directory. I use the "-r" flag to
+  stop the implementation of Make I have from assuming anything about my
+  system.
+
+  You may find that the file src.c.dlist causes gcc to crash. If this happens,
+  simply move back into the parent directory and continue the build process by
+  typing:
+
+	dir ^
+	make -r all
+
+
+I have made a number of assumptions which can be changed by editing the
+Makefiles provided. There are sample commands for several permutations of
+compilers, libraries, and linkers in the file, "Make-cfg".
+
+	(1) gcc is the C compiler of choice.
+	    If this is not the case then the relevant compiler will need to be
+	    invoked with the relevant switches.
+
+	(2) Unixlib is the C library of choice.
+	    If gcc is to be used in conjunction with the Shared C Library then
+	    the -mstubs switch should be used instead of the -munixlib switch in
+	    the gcc command. Other compiler users should do whatever is necessary
+	    to specify the library which they want to use.
+   
+	    From the quick test I performed with the Shared C Library (after I
+	    hacked the assembler output from gcc for the file "src-glu.c.quadric"
+	    so that it assembled with as) it appears to produce executables of
+	    similar sizes to those produced using UnixLib, but which ran slightly
+	    slower.
+
+	(3) The free utility, makeALF, is used to link the component object files
+	    of the libraries. I had previously used the "ld" command (in the case
+	    of gcc, this means drlink), but I have had problems with memory (so I
+	    believe) which cause my machine to hang.
+
+	    I personally use makeALF, which can be found on HENSA or one of its
+	    mirrors. In principle, this should help cut down the size of users'
+	    executables, but it doesn't seem to help much. You should use it to
+	    link the component object files instead of using the "ld" command.
+
+	(4) The assembler, as, is to be used to assemble the pixel reading and
+	    writing functions. This assembler is supplied with gcc.
+
+
+All of the relevant paths for the above need to be set before installation can
+take place. In particular, makeALF will need some sort of run path setting as,
+unlike gcc and UnixLib, it doesn't set one. You can always put it in your
+binaries directory if you like that sort of thing.
+
+
+Demonstrations ------------------------------------------------------------------
+
+There are no demos specifically for RISC OS in the main Mesa distribution.
+I have compiled a subset of the aux toolkit and modified various demos so that
+they produce output to the screen or to a window. You can find these at
+
+	http://www-solar.mcs.st-and.ac.uk/~davidb/Mesa/Software/
+
+Note that the executables I have obtained using Mesa tend to be large; by this
+I mean at least 1MB on disc. Running them tends to require over 2500K; some of
+them require 5MB or so.
+
+
+GLUT ----------------------------------------------------------------------------
+
+Since the GLUT toolkit is now recommended instead of the aux and tk toolkits,
+then the best way to use Mesa would be to port this, too. I would expect that
+unless someone volunteers to do it then it will be a while before you can
+expect to see it on the RISC OS platform as I have enough to do as it is.
+
+Look at
+
+	http://reality.sgi.com/mjk_asd/glut3/glut3.html
+
+for information on GLUT.
+
+
+PyOpenGL ------------------------------------------------------------------------
+
+PyOpenGL is an OpenGL wrapper for Python, available from
+
+	http://pyopengl.sourceforge.net/
+
+A modified version for RISC OS is available from
+
+	http://www-solar.mcs.st-and.ac.uk/~davidb/PyOpenGL/
+
+If you wish to build your own version of PyOpenGL, then you will need to modify
+the "Make-cfg" file supplied with this package, and rebuild Mesa.
+
+
+Threading -----------------------------------------------------------------------
+
+I have not had time to look at the threading facilites (introduced in Mesa
+2.6) and indeed at threading itself, but I am encouraged to see apparent
+exploitation of threading by the off-screen renderer on which the RISC OS
+renderer is based.
+
+
+Comments/Contacts ---------------------------------------------------------------
+
+If anyone feels that they would like to collaborate on this porting effort,
+or has useful advice as a C or OpenGL guru, then by all means contact me
+(David Boddie) at: david@boddie.net
+
+
+History -------------------------------------------------------------------------
+
+Version: 0.37a1
+Updated: Mon 04th June 2001
+by:	David Boddie
+
+Implemented some of the 16 bpp functions in assembler.
+
+Version: 0.36b6
+Updated: Fri 04th May 2001
+by:	 David Boddie
+
+Modified src/RISCOS/rosmesa.c and include/GL/rosmesa.h to conform to the
+driver data structures used in Mesa 3.3 onwards. Updated the Makefile to
+deal with the new distribution.
+
+Version: 0.36b5
+Updated: Tue 14th November 2000
+by:	 David Boddie
+
+Updated the documentation.
+
+Version: 0.36b4
+Updated: Sat 26th August 2000
+by:	 David Boddie
+
+Updated the Makefile for the GLU distribution.
+
+Version: 0.36b3
+Updated: Thu 20th July 2000
+by:	 David Boddie
+
+Uncommented the line
+
+   (void) pv;
+
+in the smooth_rgba_z_triangle function, hopefully stopping strange colour
+problems with the teapot16 and teapot32 demonstrations.
+
+Version: 0.36b2
+Updated: Sat 29th April 2000
+by:	 David Boddie
+
+Updated this documentation since the latest release version of Mesa (3.2)
+appears to work.
+
+Version: 0.35b release for Mesa 3.1b3
+Updated: Sun 26th September 1999
+by:	 David Boddie
+
+Changed Makefiles to work with the distribution of the new beta version.
+(More files were added and the src directory structure was changed slightly.)
+
+Version: 0.35b
+Updated: Tue 01st June 1999
+by:      David Boddie
+
+Updated the line and triangle drawing functions to cope with the new data
+structures for the vertex buffer. Colours are now referred to using the
+ColourPtr member. Transformation appears to be routed through functions in
+the X86 directory. The ARM transformation functions may have to be rewritten.
+
+Version: 0.34b
+Updated: Tue 20th April 1999
+by:      David Boddie
+
+Found some problems with using the && operator instead of the bitwise AND
+(&) operator in bit operations. 8 bpp mode should now work. 32 bpp problems
+with the texcyl demo appear to be with the 0.33 versions and earlier rather
+than with the 0.34a version. i.e. the demo appears as it does under Linux
+whereas previously it appeared differently.
+
+Version: 0.34a
+Updated: Tue 20th April 1999
+by:      David Boddie
+
+Changed the available formats to just ROSMESA_RGB and ROSMESA_RGBA. An
+additional parameter must now be passed to ROSMesaCreateContext containing
+the required bits per pixel for that mode. ROSMESA_RGB supports 8 and 16 bpp
+while ROSMESA_RGBA supports 32 bpp.
+
+Now use ROSMesaCreateContext( GLenum format, GLuint bpp, GLboolean doublebuffer )
+to create a rendering context.
+
+Version: 0.33
+Updated: Mon 09th November 1998
+by:      David Boddie
+
+32 bits per pixel functions now call assembler functions to read and write
+pixels to the buffer. Non-dithered 16 bits per pixel functions have been
+optimised to use register shifts rather than multiplication and division.
+Dithering still needs to be sorted out for this mode then the functions
+can be rewritten in assembler.
+
+Version: 0.32
+Updated: Sat 20th June 1998
+by:      David Boddie
+
+Added support for dithering via the GL_DITHER switch. This is changed by the
+application through the glEnable ans glDisable commands (it is initially
+enabled). When such an action occurs, the function pointed to by the context
+structure ctx->Driver.Dither is called. This is called dither in ROSMesa and
+it sets the ROSMesa driver flag ctx->DriverCtx->dither flag and calls the
+rosmesa_setup_DD_function to reset the plotting function pointers for that
+context.
+
+Version: 0.31
+Updated: Thu 18th June 1998
+by:      David Boddie
+
+Added support for double buffering using the ROSMesaSwapBuffers function.
+To do this, I had to add the context variables, buffer1, buffer2, and
+buffer_mode.
+The following function have now changed as a result:
+
+ROSMesaCreateContext - now takes a GLboolean argument which specifies
+                       whether double buffering is used.
+ROSMesaMakeCurrent   - takes an extra buffer argument which specifies
+                       where the second buffer is stored.
+
+Version: 0.3
+Updated: Tue 12th May 1998
+         Wed 13th May 1998
+         Sat 23rd May 1998
+by:      David Boddie
+
+Changed driver with hacks to implement scaling, as the scaling factors
+have apparently been removed from the gl_create_visual call. This is,
+I hope, a temporary measure.
+
+Version: 0.2
+Updated: Sun 08th February 1998
+         Tue 10th February 1998
+by:      David Boddie
+
+Tidied documentation within relevant files. Works with Mesa 2.6 beta.
+
+Version: 0.1
+Updated: Thu 22nd January 1998
+by:      David Boddie
+
+Now using Mesa version 2.5 instead of version 2.4.
+Added 16 bpp support for some functions, and rudimentary 8 bpp support.
+
+Version: 0.01
+Created: Mon 10th November 1997
+Creator: David Boddie
+Initial revision.
+
+Derived from the off-screen renderer, "osmesa", and "svgamesa".
+Very little added to the material on which it is based.

@@ -1,0 +1,147 @@
+Mesa library demos for Acorn RISC OS
+
+Mesa author:		Brian Paul (brian@mesa3d.org)
+
+RISC OS renderer
+additions; author of
+this document:		David Boddie (david@boddie.net)
+
+This file created:	Thu 19th February 1998
+     last updated:	Sat 05th May 2001
+
+
+Contents --------------------------------------------------------------------
+
+Disclaimer
+
+Introduction
+
+Distribution		- What I have included.
+Requirements		- Tools and packages required.
+
+Installation		- How to compile the demos.
+
+Comments/Contacts	- Who to contact.
+
+Copyright Notice	- The Silicon Graphics Inc. notice for their demos.
+
+
+Disclaimer ------------------------------------------------------------------
+
+The author of the RISC OS specific parts of this distribution accepts no
+responsibility for any damage caused by the use of misuse of any part of
+this distribution.
+
+
+Introduction ----------------------------------------------------------------
+
+This distribution provides support for compiling a subset of the aux toolkit
+and provides some demos for use under Acorn RISC OS.
+
+The "rosdemo" programs are modified versions of demos written for Brian
+Paul's off-screen renderer with modifications to enable writing to RISC OS
+screen modes.
+
+The "teapot", "movelight" and "cone2" demos are modified versions of demos which
+are (c) Copyright Silicon Graphics Inc. and the relevant copyright statement
+is included at the end of this file.
+
+
+Distribution ----------------------------------------------------------------
+
+The only files which I have contributed or modified are the following:
+
+AMakefile			To help compilation of the aux library and demos
+
+ros_demos
+	c
+		Makefile
+		rosdemo8
+		rosdemo16
+		rosdemo32
+		teapot8
+		teapot16
+		teapot32
+		anti32
+		cube32
+		morph3d		A nice demo by Marcelo F. Vianna intended for xlock
+		morph32		A modified version of morph3d
+		cone2
+		cube3
+		movelight
+
+src_aux
+		Makefile	A modified Makefile for RISC OS to build a subset
+				of the aux library
+
+
+Requirements ----------------------------------------------------------------
+
+The Mesa and GLU libraries, already installed on a suitable filing system.
+A working C compiler, linker, make utility, and libraries to link with.
+
+
+Installation ----------------------------------------------------------------
+
+Merge this distribution with the Mesa libraries distribution.
+
+Ensure that you have already read the file, "README/RISCOS" or
+"README/RISCOS/html", and built the libMesaGL and libMesaGLU libraries.
+
+At a command prompt, and in the installation directory, type:
+
+	make -r -f AMakefile all
+
+(You can rename "AMakefile" to "Makefile" and just type "make install" if
+you have already built the Mesa and GLU libraries.)
+
+You should now have another library, libMesaAux in the lib directory, and
+also some executables in the ros_demos.demos directory.
+
+
+Comments/Contacts -----------------------------------------------------------
+
+If anyone feels that they would like to help with (or indeed take over)
+this porting effort, or has useful advice as a C or OpenGL guru, then by
+all means contact me (David Boddie) at: david@boddie.net
+
+
+Copyright Notice ------------------------------------------------------------
+                 (included from the file tea.c in the MesaDemos distribution)
+
+/*
+ * (c) Copyright 1993, Silicon Graphics, Inc.
+ * ALL RIGHTS RESERVED 
+ * Permission to use, copy, modify, and distribute this software for 
+ * any purpose and without fee is hereby granted, provided that the above
+ * copyright notice appear in all copies and that both the copyright notice
+ * and this permission notice appear in supporting documentation, and that 
+ * the name of Silicon Graphics, Inc. not be used in advertising
+ * or publicity pertaining to distribution of the software without specific,
+ * written prior permission. 
+ *
+ * THE MATERIAL EMBODIED ON THIS SOFTWARE IS PROVIDED TO YOU "AS-IS"
+ * AND WITHOUT WARRANTY OF ANY KIND, EXPRESS, IMPLIED OR OTHERWISE,
+ * INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY OR
+ * FITNESS FOR A PARTICULAR PURPOSE.  IN NO EVENT SHALL SILICON
+ * GRAPHICS, INC.  BE LIABLE TO YOU OR ANYONE ELSE FOR ANY DIRECT,
+ * SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY
+ * KIND, OR ANY DAMAGES WHATSOEVER, INCLUDING WITHOUT LIMITATION,
+ * LOSS OF PROFIT, LOSS OF USE, SAVINGS OR REVENUE, OR THE CLAIMS OF
+ * THIRD PARTIES, WHETHER OR NOT SILICON GRAPHICS, INC.  HAS BEEN
+ * ADVISED OF THE POSSIBILITY OF SUCH LOSS, HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE
+ * POSSESSION, USE OR PERFORMANCE OF THIS SOFTWARE.
+ * 
+ * US Government Users Restricted Rights 
+ * Use, duplication, or disclosure by the Government is subject to
+ * restrictions set forth in FAR 52.227.19(c)(2) or subparagraph
+ * (c)(1)(ii) of the Rights in Technical Data and Computer Software
+ * clause at DFARS 252.227-7013 and/or in similar or successor
+ * clauses in the FAR or the DOD or NASA FAR Supplement.
+ * Unpublished-- rights reserved under the copyright laws of the
+ * United States.  Contractor/manufacturer is Silicon Graphics,
+ * Inc., 2011 N.  Shoreline Blvd., Mountain View, CA 94039-7311.
+ *
+ * OpenGL(TM) is a trademark of Silicon Graphics, Inc.
+ */
